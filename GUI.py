@@ -1,110 +1,57 @@
 from tkinter import *
-import matplotlib
+from matplotlib import pyplot
 import Solver
-
-
-def draw_graph():
-    try:
-        numberofsteps = int(box_steps.get())
-        x0 = float(box_x)
-        y0 = float(box_y)
-    except:
-        numberofsteps = 10
-        x0 = 0
-        y0 = 1
-    if numberofsteps > 10000 or numberofsteps < 1:
-        numberofsteps = 10
-    if x0 > 7:
-        x0 = 0
-    if method == "Euler’s method":
-        matplotlib.pyplot.title("Euler's method")
-        res = Solver.EulerMethod(x0, y0, numberofsteps)
-    if method == "Improved Euler’s method":
-        matplotlib.pyplot.title("Improved Euler's method")
-        res = Solver.ImprovedEulerMethod(x0, y0, numberofsteps)
-    if method == "Runge-Kutta method":
-        matplotlib.pyplot.title("Runge-Kutta method")
-        res = Solver.RungeKuttaMethod(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    res = Solver.solve(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    matplotlib.pyplot.legend("Approx", "Exact")
-    matplotlib.pyplot.show()
-
-
-def draw_error_graph():
-    try:
-        numberofsteps = int(box_steps.get())
-        x0 = float(box_x)
-        y0 = float(box_y)
-    except:
-        numberofsteps = 10
-        x0 = 0
-        y0 = 1
-    if numberofsteps > 10000 or numberofsteps < 1:
-        numberofsteps = 10
-    if x0 > 7:
-        x0 = 0
-    if method == "Euler’s method":
-        matplotlib.pyplot.title("Euler's method error")
-        res = Solver.EulerMethod_error(x0, y0, numberofsteps)
-    if method == "Improved Euler’s method":
-        matplotlib.pyplot.title("Improved Euler's method error")
-        res = Solver.ImprovedEulerMethod_error(x0, y0, numberofsteps)
-    if method == "Runge-Kutta method":
-        matplotlib.pyplot.title("Runge-Kutta method error")
-        res = Solver.RungeKuttaMethod_error(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    matplotlib.pyplot.show()
-
 
 def draw_all_graphs():
     try:
         numberofsteps = int(box_steps.get())
-        x0 = float(box_x)
-        y0 = float(box_y)
+        x0 = float(box_x.get())
+        y0 = float(box_y.get())
+        X = float(box_end.get())
     except:
         numberofsteps = 10
         x0 = 0
         y0 = 1
-    if numberofsteps > 10000 or numberofsteps < 1:
+        X = 7
+    if numberofsteps > 1000000 or numberofsteps < 10:
         numberofsteps = 10
-    if x0 > 7:
-        x0 = 0
-    res = Solver.EulerMethod(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    res = Solver.ImprovedEulerMethod(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    res = Solver.RungeKuttaMethod(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    res = Solver.solve(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    matplotlib.pyplot.legend("Euler", "Improv. Euler", "R-K", "Exact")
-    matplotlib.pyplot.show()
+    if X <= x0:
+        X = x0 + 7
+    res = Solver.EulerMethod(x0, y0, numberofsteps, X)
+    pyplot.plot(res[0], res[1], label="Euler")
+    res = Solver.ImprovedEulerMethod(x0, y0, numberofsteps, X)
+    pyplot.plot(res[0], res[1], label="Improv. Euler")
+    res = Solver.RungeKuttaMethod(x0, y0, numberofsteps, X)
+    pyplot.plot(res[0], res[1], label="Runge-Kutta")
+    res = Solver.solve(x0, y0, numberofsteps, X)
+    pyplot.plot(res[0], res[1], label="Exact")
+    pyplot.legend()
+    pyplot.show()
 
 
 def draw_all_error_graphs():
     try:
         numberofsteps = int(box_steps.get())
-        x0 = float(box_x)
-        y0 = float(box_y)
+        x0 = float(box_x.get())
+        y0 = float(box_y.get())
+        X = float(box_end.get())
     except:
         numberofsteps = 10
         x0 = 0
         y0 = 1
-    if numberofsteps > 10000 or numberofsteps < 1:
+        X = 7
+    if numberofsteps > 1000000 or numberofsteps < 10:
         numberofsteps = 10
-    if x0 > 7:
-        x0 = 0
-    matplotlib.pyplot.title("All errors")
-    res = Solver.EulerMethod_error(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    res = Solver.ImprovedEulerMethod_error(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    res = Solver.RungeKuttaMethod_error(x0, y0, numberofsteps)
-    matplotlib.pyplot.plot(res[0], res[1])
-    matplotlib.pyplot.legend("Euler", "Improv. Euler", "R-K")
-    matplotlib.pyplot.show()
+    if X <= x0:
+        X = x0 + 7
+    res = Solver.EulerMethod_error(x0, y0, numberofsteps, X)
+    pyplot.plot(res[0], res[1], label="Euler")
+    res = Solver.ImprovedEulerMethod_error(x0, y0, numberofsteps, X)
+    pyplot.plot(res[0], res[1], label="Improv. Euler")
+    res = Solver.RungeKuttaMethod_error(x0, y0, numberofsteps, X)
+    pyplot.plot(res[0], res[1], label="Runge-Kutta")
+    pyplot.legend()
+    pyplot.show()
 
 root = Tk()
 root.title("Equation Solver")
@@ -136,17 +83,12 @@ box_y.insert(END, '1')
 label_y = Label(root, text="y0:")
 label_y.place(x=5, y=60)
 
-method = StringVar(root)
-choices = {"Improved Euler’s method", "Runge-Kutta method", "Euler’s method"}
-method.set("Euler's method")
-popupMenu = OptionMenu(root, method, *choices)
-popupMenu.place(x=5, y=80)
+box_end = Entry(root)
+box_end.place(x=100, y=80)
+box_end.insert(END, '7')
 
-draw_button = Button(root, text="draw graph", command=lambda: draw_graph())
-draw_button.place(anchor="center", x=200, y=150)
-
-draw_error_button = Button(root, text="draw error graph", command=lambda: draw_error_graph())
-draw_error_button.place(anchor="center", x=200, y=175)
+label_end = Label(root, text="X:")
+label_end.place(x=5, y=80)
 
 draw_all_button = Button(root, text="draw all graphs", command=lambda: draw_all_graphs())
 draw_all_button.place(anchor="center", x=200, y=200)
