@@ -97,3 +97,30 @@ def RungeKuttaMethod_error(x0, y0, numberofsteps, N):
         res[0].append(res1[0][i])
         res[1].append(abs(res1[1][i] - res2[1][i]))
     return res
+
+
+def EulerMethod_maxerror(n):
+    res1 = solve(0, 1, n, 1.5)
+    res2 = EulerMethod(0, 1, n, 1.5)
+    ans = -1
+    for i in range(len(res1[0])):
+        ans = max(ans, abs(res1[1][i] - res2[1][i]))
+    return ans
+
+
+def ImprovedEulerMethod_maxerror(n):
+    res1 = solve(0, 1, n, 1.5)
+    res2 = ImprovedEulerMethod(0, 1, n, 1.5)
+    ans = -1
+    for i in range(len(res1[0])):
+        ans = max(ans, abs(res1[1][i] - res2[1][i]))
+    return ans
+
+
+def RungeKuttaMethod_maxerror(n):
+    res1 = solve(0, 1, n, 1.5)
+    res2 = RungeKuttaMethod(0, 1, n, 1.5)
+    ans = -1
+    for i in range(len(res1[0])):
+        ans = max(ans, abs(res1[1][i] - res2[1][i]))
+    return ans
